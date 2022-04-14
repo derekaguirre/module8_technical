@@ -2,3 +2,4 @@
 # Ctrl + Alt + Elite
 print("Hello world")
 print("Goodbye world")
+print("Anyone know how to get winning lottery ticket without payin too much?")
