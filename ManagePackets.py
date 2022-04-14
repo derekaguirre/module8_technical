@@ -3,3 +3,4 @@
 print("Hello world")
 print("Goodbye world")
 print("Anyone know how to get winning lottery ticket without payin too much?")
+print("Please i need the money")
