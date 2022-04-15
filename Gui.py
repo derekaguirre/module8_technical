@@ -8,23 +8,17 @@ root.title("CAN Visualizer")
 
 frame1 = tk.Frame(root)
 frame1.pack()
-
 tree = ttk.Treeview(frame1)
 tree["columns"] = ("C1", "C2", "C3", "C4", "C5", "C6")
 tree.column("#0", width=100, minwidth=200, stretch=tk.NO)
 tree.column("C1", width=150, minwidth=200, stretch=tk.NO)
 tree.column("C2", width=150, minwidth=200, stretch=tk.NO)
 tree.column("C3", width=150, minwidth=200, stretch=tk.NO)
-tree.column("C4", width=150, minwidth=200, stretch=tk.NO)
-tree.column("C5", width=150, minwidth=200, stretch=tk.NO)
-tree.column("C6", width=250, minwidth=200, stretch=tk.NO)
-tree.heading("#0", text="ID", anchor=tk.W)
-tree.heading("C1", text="Time", anchor=tk.W)
-tree.heading("C2", text="Source", anchor=tk.W)
-tree.heading("C3", text="Destination", anchor=tk.W)
-tree.heading("C4", text="Protocol", anchor=tk.W)
-tree.heading("C5", text="Length", anchor=tk.W)
-tree.heading("C6", text="Info", anchor=tk.W)
+
+tree.heading("#0", text="TimeStamp", anchor=tk.W)
+tree.heading("C1", text="CanBus Type", anchor=tk.W)
+tree.heading("C2", text="ID", anchor=tk.W)
+tree.heading("C3", text="Data", anchor=tk.W)
 
 t = {}
 
