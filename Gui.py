@@ -1,15 +1,63 @@
-# This file is used to build the GUI of the CAN Bus visualizer
-from tkinter import *
+import tkinter as tk
+from tkinter import ttk
+
+headings = ["Heading0", "Heading1", "Heading2", "Heading3"]
+
+root = tk.Tk()
+root.title("CAN Visualizer")
+
+frame1 = tk.Frame(root)
+frame1.pack()
+
+tree = ttk.Treeview(frame1)
+tree["columns"] = ("C1", "C2", "C3", "C4", "C5", "C6")
+tree.column("#0", width=100, minwidth=200, stretch=tk.NO)
+tree.column("C1", width=150, minwidth=200, stretch=tk.NO)
+tree.column("C2", width=150, minwidth=200, stretch=tk.NO)
+tree.column("C3", width=150, minwidth=200, stretch=tk.NO)
+tree.column("C4", width=150, minwidth=200, stretch=tk.NO)
+tree.column("C5", width=150, minwidth=200, stretch=tk.NO)
+tree.column("C6", width=250, minwidth=200, stretch=tk.NO)
+tree.heading("#0", text="ID", anchor=tk.W)
+tree.heading("C1", text="Time", anchor=tk.W)
+tree.heading("C2", text="Source", anchor=tk.W)
+tree.heading("C3", text="Destination", anchor=tk.W)
+tree.heading("C4", text="Protocol", anchor=tk.W)
+tree.heading("C5", text="Length", anchor=tk.W)
+tree.heading("C6", text="Info", anchor=tk.W)
+
+t = {}
+
+for i in range(5):
+    t[i] = tree.insert("", i, text="Example " + str(i), values=("val1", "val2"))
+tree.pack(expand=True, fill="both")
+
+def create():
+    for i, val in enumerate(headings):
+        if i == 0:
+            tree2.column("#0", width=200, minwidth=200, stretch=tk.NO)
+        elif i == 1:
+            tree2["columns"] = ("C1", )
+            tree2.column("C1", width=800, minwidth=200, stretch=tk.NO)
+        else:
+            tree2["columns"] = tree2["columns"] + ("C" + str(i), )
+            tree2.column("C" + str(i), width=800, minwidth=200, stretch=tk.NO)
+
+    for i, val in enumerate(headings):
+        if i == 0:
+            tree2.heading("#0", text=val, anchor=tk.W)
+        elif i == 1:
+            tree2.heading("C1", text=val, anchor=tk.W)
+        else:
+            tree2.heading("C" + str(i), text=val, anchor=tk.W)
 
 
-def print_hello():
-    print('Hello')
+btn1 = tk.Button(frame1, text="Add", command=create)
+btn1.pack(side="top")
 
-root = Tk()
-root.title('CAN Bus Visualizer')
-root.geometry('400x300') # Set window size
-
-play_button = Button(root, text='Play', padx=40, pady=20, command=print_hello)
+tree2 = ttk.Treeview(frame1)
 
 
-root.mainloop() # Keep running app
+tree2.pack(expand=True, fill="both")
+
+root.mainloop()
