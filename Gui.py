@@ -5,6 +5,17 @@ headings = ["Heading0", "Heading1", "Heading2", "Heading3"]
 
 root = tk.Tk()
 root.title("CAN Visualizer")
+topFrame = tk.Frame(root)
+topFrame.pack()
+visButton = tk.Button(topFrame,text="Can Bus Visualizer",padx=50)
+visButton.pack(side="left")
+visButton2 = tk.Button(topFrame,text="Nodes",padx=50)
+visButton2.pack(side="right")
+visButton3 = tk.Button(topFrame,text="Visualizer",padx=50)
+visButton3.pack(side="left")
+visButton4 = tk.Button(topFrame,text="Packets",padx=50)
+visButton4.pack(side="right")
+
 
 frame1 = tk.Frame(root)
 frame1.pack()
