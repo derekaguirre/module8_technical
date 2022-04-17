@@ -20,7 +20,6 @@ packetListFrame.grid(sticky="new")
 packetDetailView.grid(sticky="new")
 packetByteView.grid(sticky="new")
 
-
 # create the button for the top button frame
 visButton = tk.Button(topButtonframe,text="Can Bus Visualizer",padx=50)
 visButton2 = tk.Button(topButtonframe,text="Nodes",padx=50)
