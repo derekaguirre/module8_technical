@@ -1,6 +1,29 @@
 from textwrap import fill
 import tkinter as tk
 from tkinter import ttk
+from threading import Thread
+
+from CANBusReader import CANBusReader
+
+
+#Init CANBusReader
+bus_reader = CANBusReader('honda.dbc')
+running = False
+
+
+def stop_feed():
+    global running
+    if running:
+        print('Stopped Feed')
+        running = not bus_reader.stop_live_feed()
+
+
+def start_feed():
+    global running
+    if not running:
+        print('Started live feed')
+        running = bus_reader.start_live_feed()
+
 
 root = tk.Tk()
 root.title('CAN Visualizer')
@@ -41,8 +64,8 @@ viewButton = tk.Button(settingsFrame,text="View",padx=10)
 settingsButton = tk.Button(settingsFrame,text="Settings",padx=10)
 helpButton = tk.Button(settingsFrame,text="Help",padx=10)
 zoomButton = tk.Button(settingsFrame,text="Zoom",padx=10)
-playButton = tk.Button(settingsFrame,text="Play",padx=10)
-stopButton = tk.Button(settingsFrame,text="Stop",padx=10)
+playButton = tk.Button(settingsFrame,text="Play",padx=10,command=start_feed)
+stopButton = tk.Button(settingsFrame,text="Stop",padx=10,command=stop_feed)
 
 # layout the button in the settings frame
 fileButton.grid(row=1, column=1)
