@@ -1,33 +1,71 @@
-from textwrap import fill
 import tkinter as tk
 from tkinter import ttk
 from threading import Thread
+from tkinter import messagebox
 
 from CANBusReader import CANBusReader
+from FileReader import FileReader
 
 
 #Init CANBusReader
 bus_reader = CANBusReader('honda.dbc')
-running = False
+running = False  # determines if CAN Bus is reading live or not. False by default
+
+# Init FileReader
+filereader = FileReader()
+
+# Create data files
+open('CapturedPackets.pcap', 'w')
+open('DecodedPackets.txt', 'w')
+
+# open files to read
+cp_file = open('CapturedPackets.pcap', 'r')
+dec_file = open('DecodedPackets.txt', 'r')
+
+# Init row for packets
+colnames1 = None
 
 
+# Stop CAN Bus Reader from reading from live stream
 def stop_feed():
-    global running
+    global running, displayer_cp_t
     if running:
         print('Stopped Feed')
         running = not bus_reader.stop_live_feed()
 
 
+# Start CAN Bus Reader for reading from live stream
 def start_feed():
-    global running
+    global running, cp_file, displayer_cp_t, displayer_dec_t
     if not running:
         print('Started live feed')
         running = bus_reader.start_live_feed()
 
+    displayer_cp_t.start()
+    displayer_dec_t.start()
+
+# Display the data from the CAN Bus file to the UI
+def display_data(file):
+    global running, colnames1
+    current_packet = 0 # Count current packet in file
+    t = {}
+
+    if running:
+        for packet in filereader.follow_file(file):
+            if packet:
+                t[current_packet] = colnames1.insert("", current_packet, text=packet)
+                current_packet += 1
+
+            colnames1.pack(expand=True, fill="both")
+
+
+# Create Threads for reading
+displayer_cp_t = Thread(target=display_data, args=(cp_file,))
+displayer_dec_t = Thread(target=display_data, args=(dec_file,))
 
 root = tk.Tk()
 root.title('CAN Visualizer')
-root.geometry('{}x{}'.format(750, 875))
+root.geometry('{}x{}'.format(1000, 800))
 
 # create all of the main containers
 topButtonframe = tk.Frame(root)
@@ -80,7 +118,7 @@ stopButton.grid(row=1, column=8)
 #PacketList
 colnames1 = ttk.Treeview(packetListFrame)
 colnames1["columns"] = ("C1", "C2", "C3")
-colnames1.column("#0", width=100, minwidth=200, stretch=tk.NO)
+colnames1.column("#0", width=700, minwidth=200, stretch=tk.NO)
 colnames1.column("C1", width=150, minwidth=200, stretch=tk.NO)
 colnames1.column("C2", width=150, minwidth=200, stretch=tk.NO)
 colnames1.column("C3", width=150, minwidth=200, stretch=tk.NO)
@@ -89,15 +127,20 @@ colnames1.heading("#0", text="TimeStamp", anchor=tk.W)
 colnames1.heading("C1", text="CanBus Type", anchor=tk.W)
 colnames1.heading("C2", text="ID", anchor=tk.W)
 colnames1.heading("C3", text="Data", anchor=tk.W)
+colnames1.pack(expand=True, fill="both")
+
 
 #Populate PacketList
 t = {}
+'''
 for i in range(5):
     t[i] = colnames1.insert("", i, text="Example " + str(i), values=("val1", "val2"))
 colnames1.pack(expand=True, fill="both")
+'''
 
 #Populate PacketDetail
 #Ethernet II
+'''
 eth = packetDetailView.insert('',0,text="Ethernet II, Src: ")
 
 #Internet Protocol
@@ -109,6 +152,7 @@ udp = packetDetailView.insert('',2,text="User Datagram Protocol, Src Port: ")
 #Domain Name
 dns = packetDetailView.insert('','end',text="Domain Name System (response)" )
 packetDetailView.insert(dns,0,text="time")
+
 
 #Packet Bytes Frame
 colnames1 = ttk.Treeview(packetByteView)
@@ -122,5 +166,12 @@ colnames1.heading("#0", text="TimeStamp", anchor=tk.W)
 colnames1.heading("C1", text="CanBus Type", anchor=tk.W)
 colnames1.heading("C2", text="ID", anchor=tk.W)
 colnames1.heading("C3", text="Data", anchor=tk.W)
+'''
 
+def on_closing():
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        root.destroy()
+        stop_feed()
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
