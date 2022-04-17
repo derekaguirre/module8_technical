@@ -47,3 +47,28 @@ Exit root mode:
 - Ctrl + D
 
 You may now run the program freely.
+
+### Functionality covered
+The functionality that the current version of the prototype covers is the reading and decoding 
+of packets coming from the can bus network. The system proceeds to use three different processes 
+to accomplish this task. In one sub-process, the system runs Can sniffer to read the packets 
+coming from the Can Bus network. The second sub-process that the current process runs, it uses 
+can_gen to generate packets. This sub-process Is used for testing only to simulate the connection 
+to the Can Bus Network.  The third sub-process is in charge of decoding the packets captured in 
+the first sub-process. The packets captured and the decoded packets are stored into two different 
+files, CapturedPackets.pcap and DecodedPackets.pcap. The system then uses two threads to display 
+packets into the user interface. One thread takes in the read packets and sends them to the 
+interface. The second thread will then display the threads in the user’s interface.
+
+### Status
+The system only reads and decodes the packets. The system uses sub-processes to read and decode 
+the packets. We seek to optimize it by using threads. There are buttons in the systems UI that 
+are not functional for the moment.
+
+### What did you learn?
+ * After running the program for a while, the file storing the packet becomes pretty large. This 
+could become a storage problem for sessions that are expected to take a long time.
+ * A possible solution to the storage issue might be by using piping to avoid saving the packets.
+ * Packages read from the network could produce storage problems.
+ * Got a better understanding on reading and handling packets, along with a better understanding 
+of packets structure
