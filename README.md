@@ -43,7 +43,8 @@ vcan0: flags=193<UP,RUNNING,NOARP>  mtu 72
 If CAN Bus network is not runnning, repeat from step 1 above.
 
 ### Step 3
-To run the program:
+Run the program:
+
 `python3 Gui.py`
 
 Exit root mode:
@@ -64,9 +65,9 @@ packets into the user interface. One thread takes in the read packets and sends 
 interface. The second thread will then display the threads in the user’s interface.
 
 ### Status
-The system only reads and decodes the packets. The system uses sub-processes to read and decode 
-the packets. We seek to optimize it by using threads. There are buttons in the systems UI that 
-are not functional for the moment.
+The system displays the read and decoded packets. The system uses sub-processes to read, generate and decode 
+each one of the frames coming from de CAN Bus. We seek to optimize it by using threads. There are buttons 
+in the systems UI that are not functional for the moment.
 
 ### What did you learn?
  * After running the program for a while, the file storing the packet becomes pretty large. This 
