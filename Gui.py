@@ -88,7 +88,6 @@ visButton5 = tk.Button(topButtonframe, text="ER", padx=30)
 
 # layout the button in the top frame
 visButton.grid(row=0, column=1)
-visButton2.grid(row=0, column=2)
 visButton3.grid(row=0, column=3)
 visButton4.grid(row=0, column=4)
 visButton5.grid(row=0, column=5)
