@@ -6,8 +6,7 @@ from tkinter import messagebox
 from CANBusReader import CANBusReader
 from FileReader import FileReader
 
-
-#Init CANBusReader
+# Init CANBusReader
 bus_reader = CANBusReader('honda.dbc')
 running = False  # determines if CAN Bus is reading live or not. False by default
 
@@ -42,12 +41,12 @@ def start_feed():
         running = bus_reader.start_live_feed()
 
     displayer_cp_t.start()
-    displayer_dec_t.start()
+
 
 # Display the data from the CAN Bus file to the UI
 def display_data(file):
     global running, colnames1
-    current_packet = 0 # Count current packet in file
+    current_packet = 0  # Count current packet in file
     t = {}
 
     if running:
@@ -65,14 +64,14 @@ displayer_dec_t = Thread(target=display_data, args=(dec_file,))
 
 root = tk.Tk()
 root.title('CAN Visualizer')
-root.geometry('{}x{}'.format(1000, 800))
+root.geometry('{}x{}'.format(1150, 800))
 
 # create all of the main containers
 topButtonframe = tk.Frame(root)
 settingsFrame = tk.Frame(root)
 packetListFrame = ttk.Frame(root)
 packetDetailView = ttk.Treeview(root)
-packetByteView =ttk.Treeview(root)
+packetByteView = ttk.Treeview(root)
 
 # layout all of the main containers
 topButtonframe.grid(sticky="n")
@@ -82,11 +81,10 @@ packetDetailView.grid(sticky="new")
 packetByteView.grid(sticky="new")
 
 # create the button for the top button frame
-visButton = tk.Button(topButtonframe,text="Can Bus Visualizer",padx=50)
-visButton2 = tk.Button(topButtonframe,text="Nodes",padx=50)
-visButton3 = tk.Button(topButtonframe,text="Visualizer",padx=50)
-visButton4 = tk.Button(topButtonframe,text="Packets",padx=50)
-visButton5 = tk.Button(topButtonframe,text="ER",padx=30)
+visButton = tk.Button(topButtonframe, text="Can Bus Visualizer", padx=50)
+visButton3 = tk.Button(topButtonframe, text="Visualizer", padx=50)
+visButton4 = tk.Button(topButtonframe, text="Packets", padx=50)
+visButton5 = tk.Button(topButtonframe, text="ER", padx=30)
 
 # layout the button in the top frame
 visButton.grid(row=0, column=1)
@@ -96,14 +94,14 @@ visButton4.grid(row=0, column=4)
 visButton5.grid(row=0, column=5)
 
 # create buttons for the setting frame
-fileButton = tk.Button(settingsFrame,text="File",padx=10)
-editButton = tk.Button(settingsFrame,text="Edit",padx=10)
-viewButton = tk.Button(settingsFrame,text="View",padx=10)
-settingsButton = tk.Button(settingsFrame,text="Settings",padx=10)
-helpButton = tk.Button(settingsFrame,text="Help",padx=10)
-zoomButton = tk.Button(settingsFrame,text="Zoom",padx=10)
-playButton = tk.Button(settingsFrame,text="Play",padx=10,command=start_feed)
-stopButton = tk.Button(settingsFrame,text="Stop",padx=10,command=stop_feed)
+fileButton = tk.Button(settingsFrame, text="File", padx=10)
+editButton = tk.Button(settingsFrame, text="Edit", padx=10)
+viewButton = tk.Button(settingsFrame, text="View", padx=10)
+settingsButton = tk.Button(settingsFrame, text="Settings", padx=10)
+helpButton = tk.Button(settingsFrame, text="Help", padx=10)
+zoomButton = tk.Button(settingsFrame, text="Zoom", padx=10)
+playButton = tk.Button(settingsFrame, text="Play", padx=10, command=start_feed)
+stopButton = tk.Button(settingsFrame, text="Stop", padx=10, command=stop_feed)
 
 # layout the button in the settings frame
 fileButton.grid(row=1, column=1)
@@ -115,7 +113,7 @@ zoomButton.grid(row=1, column=6)
 playButton.grid(row=1, column=7)
 stopButton.grid(row=1, column=8)
 
-#PacketList
+# PacketList
 colnames1 = ttk.Treeview(packetListFrame)
 colnames1["columns"] = ("C1", "C2", "C3")
 colnames1.column("#0", width=700, minwidth=200, stretch=tk.NO)
@@ -129,8 +127,7 @@ colnames1.heading("C2", text="ID", anchor=tk.W)
 colnames1.heading("C3", text="Data", anchor=tk.W)
 colnames1.pack(expand=True, fill="both")
 
-
-#Populate PacketList
+# Populate PacketList
 t = {}
 '''
 for i in range(5):
@@ -138,8 +135,8 @@ for i in range(5):
 colnames1.pack(expand=True, fill="both")
 '''
 
-#Populate PacketDetail
-#Ethernet II
+# Populate PacketDetail
+# Ethernet II
 '''
 eth = packetDetailView.insert('',0,text="Ethernet II, Src: ")
 
@@ -168,10 +165,12 @@ colnames1.heading("C2", text="ID", anchor=tk.W)
 colnames1.heading("C3", text="Data", anchor=tk.W)
 '''
 
+
 def on_closing():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         root.destroy()
         stop_feed()
+
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()

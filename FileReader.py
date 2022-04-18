@@ -4,7 +4,7 @@ import time
 
 class FileReader:
     # Read a file dynamically as it expands
-    def follow_file(self,file) -> str:
+    def follow_file(self, file) -> str:
         file.seek(0, os.SEEK_END)
         while True:
             line = file.readline()
