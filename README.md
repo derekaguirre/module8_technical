@@ -43,6 +43,9 @@ vcan0: flags=193<UP,RUNNING,NOARP>  mtu 72
 If CAN Bus network is not runnning, repeat from step 1 above.
 
 ### Step 3
+To run the program:
+`python3 Gui.py`
+
 Exit root mode:
 - Ctrl + D
 
@@ -72,3 +75,8 @@ could become a storage problem for sessions that are expected to take a long tim
  * Packages read from the network could produce storage problems.
  * Got a better understanding on reading and handling packets, along with a better understanding 
 of packets structure
+
+### References
+ * [CSS Electronics](https://www.csselectronics.com/pages/can-dbc-file-database-intro)
+ * [PyPi.org Can Tools](https://pypi.org/project/cantools/)
+ * [SocketCAN Can Utils](https://github.com/linux-can/can-utils)
