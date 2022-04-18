@@ -27,7 +27,7 @@ colnames1 = None
 
 # Stop CAN Bus Reader from reading from live stream
 def stop_feed():
-    global running, displayer_cp_t
+    global running
     if running:
         print('Stopped Feed')
         running = not bus_reader.stop_live_feed()
@@ -41,10 +41,11 @@ def start_feed():
         running = bus_reader.start_live_feed()
 
     displayer_cp_t.start()
+    displayer_dec_t.start()
 
 
 # Display the data from the CAN Bus file to the UI
-def display_data(file):
+def display_pcap(file):
     global running, colnames1
     current_packet = 0  # Count current packet in file
     t = {}
@@ -58,13 +59,28 @@ def display_data(file):
             colnames1.pack(expand=True, fill="both")
 
 
+# Display the data from the CAN Bus file to the UI
+def display_decoded_pcap(file):
+    global running, packetDetailView
+    current_packet = 0  # Count current packet in file
+    t = {}
+
+    if running:
+        for packet in filereader.follow_file(file):
+            if packet:
+                t[current_packet] = packetDetailView.insert("", current_packet, text=packet)
+                current_packet += 1
+
+            colnames1.pack(expand=True, fill="both")
+
+
 # Create Threads for reading
-displayer_cp_t = Thread(target=display_data, args=(cp_file,))
-displayer_dec_t = Thread(target=display_data, args=(dec_file,))
+displayer_cp_t = Thread(target=display_pcap, args=(cp_file,), daemon=True)
+displayer_dec_t = Thread(target=display_decoded_pcap, args=(dec_file,), daemon=True)
 
 root = tk.Tk()
 root.title('CAN Visualizer')
-root.geometry('{}x{}'.format(1150, 800))
+root.geometry('{}x{}'.format(1175, 800))
 
 # create all of the main containers
 topButtonframe = tk.Frame(root)
@@ -112,8 +128,11 @@ zoomButton.grid(row=1, column=6)
 playButton.grid(row=1, column=7)
 stopButton.grid(row=1, column=8)
 
-# PacketList
-colnames1 = ttk.Treeview(packetListFrame)
+# PacketList and create scroll bar
+scrollbar_cp = ttk.Scrollbar(packetListFrame)
+scrollbar_cp.pack(side='right', fill='y')
+
+colnames1 = ttk.Treeview(packetListFrame, yscrollcommand=scrollbar_cp.set)
 colnames1["columns"] = ("C1", "C2", "C3")
 colnames1.column("#0", width=700, minwidth=200, stretch=tk.NO)
 colnames1.column("C1", width=150, minwidth=200, stretch=tk.NO)
@@ -125,6 +144,8 @@ colnames1.heading("C1", text="CanBus Type", anchor=tk.W)
 colnames1.heading("C2", text="ID", anchor=tk.W)
 colnames1.heading("C3", text="Data", anchor=tk.W)
 colnames1.pack(expand=True, fill="both")
+
+scrollbar_cp.config(command=colnames1.yview)
 
 # Populate PacketList
 t = {}
